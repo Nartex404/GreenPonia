@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard - Dark Style</title>
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-firestore.js"></script>
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <div class="content-area">
+        <div class="container-fluid">
+          <div class="text-left mt-3 mb-3 d-fixed">
+            <div class="logo-image">
+                <img src="images/greenLogo.png" alt="" style="width: 250px;">
+            </div>
+          </div>
+          <div class="main">
+            <div class="title" style="margin-top: 15px;">
+                <i class="uil uil-clock-three"></i>
+                <span class="text">Actividad Reciente</span>
+              </div>
+            <div class="row sparkboxes mt-4">
+              <div class="col-md-3">
+                <div class="box box1">
+                  <div class="details">
+                  </div>
+                  <div id="spark1"></div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="box box2">
+                  <div class="details">
+                    <h3>422</h3>
+                    <h4>VIEWS</h4>
+                  </div>
+                  <div id="spark2"></div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="box box3">
+                  <div class="details">
+                    <h3>311</h3>
+                    <h4>LEADS</h4>
+                  </div>
+                  <div id="spark3"></div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="box box4">
+                  <div class="details">
+                    <h3>22</h3>
+                    <h4>SALES</h4>
+                  </div>
+                  <div id="spark4"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-md-5">
+                <div class="box shadow mt-4">
+                  <div id="radialBarBottom"></div>
+                </div>
+              </div>
+              <div class="col-md-7">
+                <div class="box shadow mt-4">
+                  <div id="line-adwords" class=""></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-md-5">
+                <div class="box shadow mt-4">
+                  <div id="barchart"></div>
+                </div>
+              </div>
+              <div class="col-md-7">
+                <div class="box shadow mt-4">
+                  <div id="areachart"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="../../../../dist/apexcharts.js"></script>
+    <script src="assets/scripts2.js"></script>
+    
+  </body>
+</html>

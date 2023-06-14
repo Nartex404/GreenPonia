@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Grilla de gráficos con ApexCharts</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  
+        <!----======== CSS ======== -->
+        <link rel="stylesheet" href="dash.css">
+            <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <style>
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 10px;
+      }
+      .chart {
+        height: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+        <div class="logo-name">
+            <div class="logo-image">
+                <img src="images/gp.jpg" alt="">
+            </div>
+
+            <span class="logo_name">GreenPonia</span>
+        </div>
+
+        <div class="menu-items">
+            <ul class="nav-links">
+                <li><a href="#">
+                    <i class="uil uil-estate"></i>
+                    <span class="link-name">Dahsboard</span>
+                </a></li>
+            </ul>
+            
+            <ul class="logout-mode">
+                <li><a href="#">
+                    <i class="uil uil-signout"></i>
+                    <span class="link-name">Logout</span>
+                </a></li>
+
+                <li class="mode">
+                    <a href="#">
+                        <i class="uil uil-moon"></i>
+                    <span class="link-name">Dark Mode</span>
+                </a>
+
+                <div class="mode-toggle">
+                  <span class="switch"></span>
+                </div>
+            </li>
+            </ul>
+        </div>
+    </nav>
+    <section class="dashboard">
+      <div class="top">
+        <i class="uil uil-bars sidebar-toggle"></i>
+      </div>
+      <div class="dash-content">
+        <div id="overview" class="overview"></div>
+        <div class="activity">
+          <div class="title">
+            <i class="uil uil-clock-three"></i>
+            <span class="text">Actividad Reciente</span>
+          </div>
+          <div class="grid">
+            <div id="chart1" class="chart"></div>
+            <div id="chart2" class="chart"></div>
+            <div id="chart3" class="chart"></div>
+            <div id="chart4" class="chart"></div>
+          </div>
+        </div>
+
+        <div class="activity">
+          <div class="title">
+            <i class="uil uil-clock-three"></i>
+            <span class="text">Actividad Historica</span>
+          </div>
+          <div class="grid">
+            <div id="chart1" class="chart"></div>
+            <div id="chart2" class="chart"></div>
+            <div id="chart3" class="chart"></div>
+            <div id="chart4" class="chart"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
+<script src="js/app.js"></script>
+<script type="module">
+
+          // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-analytics.js";
+  import { getFirestore,collection, getDocs,query, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBm2atJDKZpTvpfFUZcVvlqF9yP0LaoKvs",
+    authDomain: "greenponia-b8a97.firebaseapp.com",
+    projectId: "greenponia-b8a97",
+    storageBucket: "greenponia-b8a97.appspot.com",
+    messagingSenderId: "352633184413",
+    appId: "1:352633184413:web:69c661fc0100f9ed20f474",
+    measurementId: "G-CFJZGNQWJ1"
+  };
+
+window.addEventListener("DOMContentLoaded", async () => {
+
+        // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    // Initialize Firestore and get a reference to the service
+    const db = getFirestore(app);
+
+    
+    //const q = query(collection(db, "agroclima"), orderBy("date", "desc"));
+    const q = query(collection(db, "agroclima"));
+    const querySnapshot = await getDocs(q);
+    const data = [];
+    const realData = [];
+    let html ="";
+    querySnapshot.forEach((doc) => {
+        if (doc.id !== 'realtime'){
+          data.push({
+          id: doc.id,
+          cond: doc.data().cond,
+          crec: doc.data().crec,
+          hum: doc.data().hum ,
+          ph: doc.data().ph,
+          temp: doc.data().temp,
+        });
+        }else{
+          realData.push({
+          id: doc.id,
+          cond: doc.data().cond,
+          crec: doc.data().crec,
+          hum: doc.data().hum ,
+          ph: doc.data().ph,
+          temp: doc.data().temp,
+        });
+          console.log(doc.id);
+        }
+
+    });
+    
+    const chart1 = new ApexCharts(document.querySelector("#chart1"), {
+        chart: {
+          type: 'bar'
+        },
+        series: [
+          {
+            name: 'PH',
+            data: data.map((d) => d.ph),
+          }
+        ],
+        xaxis: {
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+        },
+      });
+      chart1.render();
+
+      const chart2 = new ApexCharts(document.querySelector("#chart2"), {
+                    chart: {
+                      type: 'line'
+                    },
+                    series: [
+                      {
+                        name: 'Temperatura',
+                        data: data.map((d) => d.temp),
+                      }
+                    ],
+                    xaxis: {
+                      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
+                    }
+                  });
+    chart2.render();
+
+    /*const chartOptions = {
+      chart: {
+        type: 'donut'
+      },
+      labels: chartData.labels,
+      series: chartData.series,
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }]
+    };*/
+    
+
+
+      const chart3 = new ApexCharts(document.querySelector("#chart3"), {
+        chart: {
+    type: "area"
+  },
+  dataLabels: {
+    enabled: false
+  },
+  series: [
+    {
+      name: "Conductividad",
+      data: data.map((d) => d.cond),
+    }
+  ],
+  colors: ["#66DA26"],
+  fill: {
+    type: "gradient",
+    gradient: {
+      shadeIntensity: 1,
+      opacityFrom: 0.7,
+      opacityTo: 0.9,
+      stops: [0, 90, 100]
+    }
+  },
+  markers: {
+    size: 5,
+    colors: ["#66DA26"],
+    strokeColor: "#00BAEC",
+    strokeWidth: 3
+  },
+  xaxis: {
+    categories: [
+      "01 Jan",
+      "02 Jan",
+      "03 Jan",
+      "04 Jan",
+      "05 Jan",
+      "06 Jan",
+      "07 Jan",
+      "04 Jan",
+      "05 Jan",
+      "06 Jan",
+      "07 Jan",
+      "04 Jan",
+      "05 Jan",
+      "06 Jan",
+      "07 Jan",
+    ]
+  }
+      });
+      chart3.render();
+
+      
+      const chart4 = new ApexCharts(document.querySelector("#chart4"), {
+
+        
+                    chart: {
+                      type: 'line'
+                    },
+                    series: [
+                      {
+                        name: 'Temperatura',
+                        data: data.map((d) => d.temp),
+                      }
+                    ],
+                    xaxis: {
+                      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
+                    }
+                  });
+    chart4.render();
+
+
+    // doc.data() is never undefined for query doc snapshots
+
+    });
+</script>

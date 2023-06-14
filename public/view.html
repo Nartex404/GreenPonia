@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<!--=== Coding by CodingLab | www.codinglabweb.com === -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="dash.css">
+     
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+
+    <!--<title>Admin Dashboard Panel</title>--> 
+
+    
+</head>
+<body>
+    <nav>
+        <div class="logo-name">
+            <div class="logo-image">
+                <!--<img src="images/logo.png" alt="">-->
+            </div>
+
+            <span class="logo_name">CodingLab</span>
+        </div>
+
+        <div class="menu-items">
+            <ul class="nav-links">
+                <li><a href="#">
+                    <i class="uil uil-estate"></i>
+                    <span class="link-name">Dahsboard</span>
+                </a></li>
+                <li><a href="#">
+                    <i class="uil uil-files-landscapes"></i>
+                    <span class="link-name">Content</span>
+                </a></li>
+                <li><a href="#">
+                    <i class="uil uil-chart"></i>
+                    <span class="link-name">Analytics</span>
+                </a></li>
+                <li><a href="#">
+                    <i class="uil uil-thumbs-up"></i>
+                    <span class="link-name">Like</span>
+                </a></li>
+                <li><a href="#">
+                    <i class="uil uil-comments"></i>
+                    <span class="link-name">Comment</span>
+                </a></li>
+                <li><a href="#">
+                    <i class="uil uil-share"></i>
+                    <span class="link-name">Share</span>
+                </a></li>
+            </ul>
+            
+            <ul class="logout-mode">
+                <li><a href="#">
+                    <i class="uil uil-signout"></i>
+                    <span class="link-name">Logout</span>
+                </a></li>
+
+                <li class="mode">
+                    <a href="#">
+                        <i class="uil uil-moon"></i>
+                    <span class="link-name">Dark Mode</span>
+                </a>
+
+                <div class="mode-toggle">
+                  <span class="switch"></span>
+                </div>
+            </li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+
+            <div class="search-box">
+                <i class="uil uil-search"></i>
+                <input type="text" placeholder="Search here...">
+            </div>
+            
+            <!--<img src="images/profile.jpg" alt="">-->
+        </div>
+
+        <div class="dash-content">
+            <div id="overview" class="overview">
+            </div>
+
+            <div class="activity">
+                <div class="title">
+                    <i class="uil uil-clock-three"></i>
+                    <span class="text">Recent Activity</span>
+                </div>
+
+                <!-- Creamos la grilla -->
+                <div class="grid">
+                    <!-- Primera fila -->
+                    <div id="chart1"></div>
+                    <div id="chart2"></div>
+                    <!-- Segunda fila -->
+                    <div id="chart3"></div>
+                    <div id="chart4"></div>
+                    <!-- Tercera fila -->
+                    <div id="chart5"></div>
+                    <div id="chart6"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="js/app.js"></script>
+   
+</body>
+</html>
+
+<script type="module">
+
+      // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-analytics.js";
+  import { getFirestore,collection, getDocs,query, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBm2atJDKZpTvpfFUZcVvlqF9yP0LaoKvs",
+    authDomain: "greenponia-b8a97.firebaseapp.com",
+    projectId: "greenponia-b8a97",
+    storageBucket: "greenponia-b8a97.appspot.com",
+    messagingSenderId: "352633184413",
+    appId: "1:352633184413:web:69c661fc0100f9ed20f474",
+    measurementId: "G-CFJZGNQWJ1"
+  };
+
+window.addEventListener("DOMContentLoaded", async () => {
+
+        // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    // Initialize Firestore and get a reference to the service
+    const db = getFirestore(app);
+
+    
+    const q = query(collection(db, "CULTIVO"), orderBy("date", "desc"), limit(1));
+    const querySnapshot = await getDocs(q);
+    let html ="";
+    querySnapshot.forEach((doc) => {
+
+      /*  html += `            <div class="title">
+                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <span class="text">Dashboard</span>
+                </div>
+                <div id="boxes" class="boxes">
+                    <div id="box1" class="box box1">
+                            <i class="uil uil-thumbs-up"></i>
+                            <span class="text">Crecimiento</span>
+                            <span id="crecimiento" class="number">${doc.data().crecimiento}</span>
+                        </div>
+                    <div class="box box2">
+                        <i class="uil uil-comments"></i>
+                        <span class="text">PH</span>
+                        <span id="ph" class="number">${doc.data().ph}</span>
+                    </div>
+                    <div class="box box3">
+                        <i class="uil uil-share"></i>
+                        <span class="text">Temperatura</span>
+                        <span id="temperatura" class="number">${doc.data().temperatura}</span>
+                    </div>
+                </div>
+                <div class="boxes">
+                    <div class="box box1">
+                        <i class="uil uil-thumbs-up"></i>
+                        <span class="text">Conductividad</span>
+                        <span id="conductividad" class="number">${doc.data().conductividad}</span>
+                    </div>
+                    <div class="box box2">
+                        <i class="uil uil-comments"></i>
+                        <span class="text">Humedad</span>
+                        <span id="humedad" class="number">${doc.data().humedad}</span>
+                    </div>
+                    <div class="box box3">
+                        <i class="uil uil-share"></i>
+                        <span class="text">Topic</span>
+                        <span id="topic" class="number">${doc.data().topic}</span>
+                    </div>
+                </div>`*/
+    // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data().crecimiento);
+
+    });
+    overview.innerHTML = html;
+});
+  
+</script>
+
+<script>
+    var options1 = {
+      series: [44, 55, 67, 83],
+      chart: {
+        type: 'donut',
+      },
+      labels: ['Apples', 'Oranges', 'Bananas', 'Berries'],
+    };
+
+    var chart1 = new ApexCharts(document.querySelector("#chart1"), options1);
+    chart1.render();
+  </script>
+  <script>
+    var options2 = {
+      series: [10, 50, 25, 15],
+      chart: {
+        type: 'pie',
+      },
+      labels: ['Blue', 'Red', 'Yellow', 'Green'],
+    };
+
+    var chart2 = new ApexCharts(document.querySelector("#chart2"), options2);
+    chart2.render();
+  </script>
+  <script>
+    var options3 = {
+      series: [{
+        name: 'Series 1',
+        data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
+      }],
+      chart: {
+        type: 'bar',
+        height: 350,
+        stacked: true,
+      },
+      xaxis: {
+        categories: ['01/01/2022', '02/01/2022', '03/01/2022', '04/01/2022', '05/01/2022', '06/01/2022', '07/01/2022', '08/01/2022', '09/01/2022'],
+      },
+    };
+
+    var chart3 = new ApexCharts(document.querySelector("#chart3"), options3);
+    chart3.render();
+  </script>
+  <script>
+    var options4 = {
+      series: [44, 55, 67, 83],
+      chart: {
+        type: 'radialBar',
+      },
+      plotOptions: {
+        radialBar: {
+          hollow: {
+            size: '70%',
+          },
+        },
+      },
+      labels: ['Apples', 'Oranges', 'Bananas', 'Berries'],
+    };
+
+    var chart4 = new ApexCharts(document.querySelector("#chart4"), options4);
+    chart4.render();
+  </script>
