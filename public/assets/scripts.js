@@ -83,11 +83,23 @@ agroclimaCollection.get().then((querySnapshot) => {
         const getMonth = date.toLocaleString("default", { month: "2-digit" });
         const getDay = date.toLocaleString("default", { day: "2-digit" });
         const timestamp = getMonth +"-"+getDay;
+        const a = data.find(x=>x.date == timestamp)
+        /*if(!a){
+          data.push({
+            id: doc.id,
+            cond: condSeg,
+            crec: doc.data().crec,
+            hum: doc.data().hum ,
+            ph: phSeg,
+            temp: doc.data().temp,
+            date: timestamp
+          });
+        }*/
 
         
         
 
-        if(timestamp ==  '06-01')
+        if(timestamp ==  '06-05')
         {
           data.push({
             id: doc.id,
@@ -137,7 +149,7 @@ agroclimaCollection.get().then((querySnapshot) => {
     },
     series: [{
       name: 'PH',
-      data: data.map((d) => d.ph)
+      //data: data.map((d) => d.ph)
     }],
     labels: data.map((d) => d.date),
     yaxis: {
@@ -257,6 +269,100 @@ agroclimaCollection.get().then((querySnapshot) => {
       }
     }
   }
+
+  var spark4 = {
+    chart: {
+      id: 'sparkline3',
+      group: 'sparklines',
+      type: 'area',
+      height: 160,
+      sparkline: {
+        enabled: true
+      },
+    },
+    stroke: {
+      curve: 'straight'
+    },
+    fill: {
+      opacity: 1,
+    },
+    series: [{
+      name: 'Humedad',
+      data: data.map((d) => d.hum)
+    }],
+    labels: data.map((d) => d.date),
+    xaxis: {
+      type: 'datetime',
+    },
+    yaxis: {
+      min: 0
+    },
+    colors: ['#FEB019'],
+    //colors: ['#5564BE'],
+    title: {
+      text: realData.map((d) => d.hum),
+      offsetX: 30,
+      style: {
+        fontSize: '24px',
+        cssClass: 'apexcharts-yaxis-title'
+      }
+    },
+    subtitle: {
+      text: 'Humedad',
+      offsetX: 30,
+      style: {
+        fontSize: '14px',
+        cssClass: 'apexcharts-yaxis-title'
+      }
+    }
+  }
+
+  var spark5 = {
+    chart: {
+      id: 'sparkline3',
+      group: 'sparklines',
+      type: 'area',
+      height: 160,
+      sparkline: {
+        enabled: true
+      },
+    },
+    stroke: {
+      curve: 'straight'
+    },
+    fill: {
+      opacity: 1,
+    },
+    series: [{
+      name: 'Humedad',
+      data: data.map((d) => d.hum)
+    }],
+    labels: data.map((d) => d.date),
+    xaxis: {
+      type: 'datetime',
+    },
+    yaxis: {
+      min: 0
+    },
+    colors: ['#FEB019'],
+    //colors: ['#5564BE'],
+    title: {
+      text: realData.map((d) => d.hum),
+      offsetX: 30,
+      style: {
+        fontSize: '24px',
+        cssClass: 'apexcharts-yaxis-title'
+      }
+    },
+    subtitle: {
+      text: 'Humedad',
+      offsetX: 30,
+      style: {
+        fontSize: '14px',
+        cssClass: 'apexcharts-yaxis-title'
+      }
+    }
+  }
   
   var monthlyEarningsOpt = {
     chart: {
@@ -317,6 +423,8 @@ agroclimaCollection.get().then((querySnapshot) => {
   new ApexCharts(document.querySelector("#spark1"), spark1).render();
   new ApexCharts(document.querySelector("#spark2"), spark2).render();
   new ApexCharts(document.querySelector("#spark3"), spark3).render();
+  new ApexCharts(document.querySelector("#spark4"), spark4).render();
+  new ApexCharts(document.querySelector("#spark5"), spark5).render();
   
   var monthlyEarningsChart = new ApexCharts(document.querySelector("#monthly-earnings-chart"), monthlyEarningsOpt);
   
