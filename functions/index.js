@@ -59,6 +59,7 @@ app.all('*', async (req, res) => {
 
      //Used to realtime data
      await namedb.doc('realtime').set({
+      timestamp:id_timestamp,
       hum:payload.uplink_message.decoded_payload.hum,
       temp:payload.uplink_message.decoded_payload.temp,
       cond:payload.uplink_message.decoded_payload.cond,
