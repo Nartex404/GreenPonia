@@ -1,0 +1,99 @@
+/* Set the size of the div element that contains the map */
+.map-content {
+    height: 100%; /* The height is 400 pixels */
+    width: 100%; /* The width is the width of the web page */
+}
+
+.logo-green-ponia {
+    width: 250px;
+    position: absolute;
+    z-index: 1000;
+    background: #ffffffd4;
+    padding: 6px;
+    margin-top: 5px;
+    border-radius: 20px;
+    border: 2px solid #136739;
+}
+
+.content-green-ponia {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.marker-content{
+    height: 100%;
+    width: 0%;
+    display: none;
+    background: #343E59;
+    border-left: 5px solid white;
+}
+
+.btn-floating {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    color: white;
+    background: red;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.text-info {
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.content-info-marker {
+    padding: 10px 0px;
+    text-align: center;
+    border-radius: 12px;
+    color: #343e59;
+    margin-bottom: 20px;
+    font-family: 'Roboto';
+}
+
+.ph {
+    background-image: linear-gradient( 135deg, #ABDCFF 10%, #0396FF 100%);
+    box-shadow: 0px 0px 5px #ABDCFF;
+}
+
+.cond {
+    background-image: linear-gradient( 135deg, #2AFADF 10%, #2AFADF 100%);
+    box-shadow: 0px 0px 5px #2AFADF;
+}
+
+.hum {
+    background-image: linear-gradient( 135deg, #FFD3A5 10%, #FD6585 100%);
+    box-shadow: 0px 0px 5px #FFD3A5;
+}
+
+.temp {
+    background-image: linear-gradient( 135deg, #EE9AE5 10%, #5961F9 100%);
+    box-shadow: 0px 0px 5px #EE9AE5;
+}
+
+.crec {
+    background-image: linear-gradient( 135deg, #E1EE9A 10%, #5FF959 100%);
+    box-shadow: 0px 0px 5px #E1EE9A;
+}
+
+.content-history {
+    bottom: 20px;
+    position: absolute;
+    width: 29%;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-history {
+    background: #136737;
+    padding: 15px;
+    border: 1px solid #3ab24b;
+    border-radius: 12px;
+    font-size: 16px;
+    color: white;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
