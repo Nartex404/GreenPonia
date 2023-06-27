@@ -45,15 +45,6 @@ function initMap() {
                 markerContent.style.display = 'block';
                 var titleCrop = document.getElementById("title-crop");
                 titleCrop.innerHTML = doc.data().name;
-                /*var realtime = db.collection("agroclima").doc("realtime");
-                realtime.get().then((doc) => {
-                    var dat = doc.data();
-                    document.getElementById("text-ph").innerHTML = dat.ph;
-                    document.getElementById("text-cond").innerHTML = dat.cond;
-                    document.getElementById("text-hum").innerHTML = dat.hum;
-                    document.getElementById("text-temp").innerHTML = dat.temp;
-                    document.getElementById("text-crec").innerHTML = dat.crec;
-                })*/
                 db.collection("agroclima").doc("realtime")
                 .onSnapshot({
                     // Listen for document metadata changes
@@ -62,17 +53,16 @@ function initMap() {
                     var dat = doc.data();
                     console.log('data',dat)
                     if(dat.timestamp) {
-                        const date = new Date(parseInt(dat.timestamp * 1000));
+                        const date = new Date(parseInt(dat.timestamp));
                         const options = {
                             year: "numeric",
                             month: "long",
                             day: "numeric",
                             hour: "numeric",
                             minute: "numeric",
-                            hour12: true
+                            hour12: false
                         };
                         document.getElementById("text-date").innerHTML = date.toLocaleString("default", options);
-                        console.log('timestamp',date.toLocaleString("default", options))
                     }
                     document.getElementById("text-ph").innerHTML = dat.ph;
                     document.getElementById("text-cond").innerHTML = dat.cond;
