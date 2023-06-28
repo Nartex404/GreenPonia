@@ -1,5 +1,6 @@
 <html>
-  <head>
+
+<head>
     <title>Green Ponia - Map</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <link rel="icon" type="image/x-icon" href="images/gp.ico">
@@ -8,15 +9,141 @@
     <script type="module" src="assets/home.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-firestore.js"></script>
-  </head>
-  <body style="margin: 0px;">
-    <div style="display: flex; justify-content: center;">
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <link rel="stylesheet" href="assets/styles.css" />
+
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-firestore.js"></script>
+    <script src="axios.min.js"></script>
+    <script src="assets/toggle.js" defer></script>
+</head>
+
+<body style="margin: 0px;">
+    <div style="display: none; justify-content: center;">
         <img class="logo-green-ponia" src="images/greenLogo.png" alt="" style="width: 250px;">
     </div>
 
     <!--The div element for the map -->
     <div class="content-green-ponia">
-        <div id="map" class="map-content"></div>
+        <div class="header-content">
+            <div><i class="material-icons">menu</i></div>
+            <img src="images/greenLogo.png" alt="" style="width: 150px; margin-left: 15px;">
+        </div>
+        <div id="map" class="map-content">Mapa</div>
+        <div class="data-content">
+            <div id="wrapper">
+                <div class="content-area">
+                    <div class="container-fluid">
+                        <div class="main">
+                            <div class="title" style="margin-top: 15px;">
+                                <i class="uil uil-clock-three"></i>
+                                <span class="text">Actividad Reciente</span>
+                            </div>
+                            <div class="row sparkboxes mt-12 mb-12">
+                                <div class="col-md-2">
+                                    <div class="box box1">
+                                        <div id="spark1"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="box box2">
+                                        <div id="spark2"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="box box3">
+                                        <div id="spark3"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="box box4">
+                                        <div id="spark4"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="box box5">
+                                        <div id="spark5"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="title" style="margin-top: 15px;">
+                                <i class="uil uil-clock-three"></i>
+                                <span class="text">Historico</span>
+                            </div>
+
+                            <div class="row mt-5 mb-4">
+                                <div class="col-md-6">
+                                    <div class="box">
+                                        <div id="bar"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="box">
+                                        <div id="donut"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4 mb-4">
+                                <div class="col-md-6">
+                                    <div class="box">
+                                        <div id="area"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="box">
+                                        <div id="line"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="toggleContainer">
+                <label for="startToggle">Start:</label>
+                <input type="checkbox" id="startToggle">
+            </div>
+
+            <div id="resultContainer"></div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const startToggle = document.getElementById('startToggle');
+                    const resultContainer = document.getElementById('resultContainer');
+
+                    startToggle.addEventListener('change', function () {
+                        const startValue = startToggle.checked;
+                        const toggleSwitch = ToggleSwitch({ start: startValue });
+                        resultContainer.innerHTML = toggleSwitch;
+                    });
+                });
+            </script>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+            <script src="../../../../dist/apexcharts.js"></script>
+            <script src="assets/data.js"></script>
+            <script src="assets/scripts.js"></script>
+        </div>
         <div id="info-marker" class="marker-content">
             <div id="btn-close" class="btn-floating"><i class="material-icons">close</i></div>
             <h1 id="title-crop" style="text-align: center; color: white;"></h1>
@@ -58,8 +185,8 @@
       with https://www.npmjs.com/package/@googlemaps/js-api-loader.
       -->
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm2atJDKZpTvpfFUZcVvlqF9yP0LaoKvs&callback=initMap&v=weekly"
-      defer
-    ></script>
-  </body>
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm2atJDKZpTvpfFUZcVvlqF9yP0LaoKvs&callback=initMap&v=weekly"
+        defer></script>
+</body>
+
 </html>
