@@ -388,13 +388,77 @@ db.collection("agroclima")
       horizontalAlign: 'right',
       offsetY: -20
     }
+    
   }
 
   var chartLine = new ApexCharts(document.querySelector('#line-humed'), optionsLine);
   chartLine.render();
 
-  //PH    
+  //PH2
   var optionsBar = {
+    chart: {
+      height: 328,
+      type: 'line',
+      zoom: {
+        enabled: false
+      },
+      dropShadow: {
+        enabled: true,
+        top: 3,
+        left: 2,
+        blur: 4,
+        opacity: 1,
+      }
+    },
+    stroke: {
+      curve: 'smooth',
+      width: 2
+    },
+    colors: ["#0396FF"],
+    series: [{
+        name: "Control de PH",
+        data: data.map((d) => d.ph),
+    }
+    ],
+    title: {
+      text: 'Control de PH',
+      align: 'left',
+      style: {
+        fontSize: '18px'
+      }
+    },
+    markers: {
+      size: 6,
+      strokeWidth: 0,
+      hover: {
+        size: 9
+      }
+    },
+    grid: {
+      show: true,
+      padding: {
+        bottom: 0
+      }
+    },
+    labels: data.map((d) => d.date),
+    xaxis: {
+      tooltip: {
+        enabled: false
+      }
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'right',
+      offsetY: -20
+    }
+    
+  }
+
+  var chartBar = new ApexCharts(document.querySelector('#bar'), optionsBar);
+  chartBar.render();
+
+  //PH    
+  /*var optionsBar = {
     series: [
     {
       data: data.map((item) => item.ph),
@@ -455,9 +519,11 @@ db.collection("agroclima")
   }
   };
 
+  
+
   var chartBar = new ApexCharts(document.querySelector('#bar'), optionsBar);
   chartBar.render();
-
+*/
 
 
  //CONDUCTIVIDAD
@@ -523,8 +589,73 @@ legend: {
 var chartArea = new ApexCharts(document.querySelector('#area'), optionsArea);
 chartArea.render();
 
-//Crecimiento      
+
+//Crecimiento2
+
 var optionsGrow = {
+  chart: {
+    height: 328,
+    type: 'line',
+    zoom: {
+      enabled: false
+    },
+    dropShadow: {
+      enabled: true,
+      top: 3,
+      left: 2,
+      blur: 4,
+      opacity: 1,
+    }
+  },
+  stroke: {
+    curve: 'smooth',
+    width: 2
+  },
+  colors: ["#5961F9"],
+  series: [{
+      name: "Porcentaje de Crecimiento",
+      data: data.map((d) => d.ph),
+  }
+  ],
+  title: {
+    text: 'Porcentaje de Crecimiento',
+    align: 'left',
+    style: {
+      fontSize: '18px'
+    }
+  },
+  markers: {
+    size: 6,
+    strokeWidth: 0,
+    hover: {
+      size: 9
+    }
+  },
+  grid: {
+    show: true,
+    padding: {
+      bottom: 0
+    }
+  },
+  labels: data.map((d) => d.date),
+  xaxis: {
+    tooltip: {
+      enabled: false
+    }
+  },
+  legend: {
+    position: 'top',
+    horizontalAlign: 'right',
+    offsetY: -20
+  }
+  
+}
+
+var chartGrow = new ApexCharts(document.querySelector("#chart-grow"), optionsGrow);
+chartGrow.render();
+
+//Crecimiento      
+/*var optionsGrow = {
   series: [{
   name: 'Crecimiento',
   data: data.map((d) => d.crec)
@@ -578,6 +709,7 @@ tooltip: {
 
 var chartGrow = new ApexCharts(document.querySelector("#chart-grow"), optionsGrow);
 chartGrow.render();
+*/
 
 
 //Temperatura
@@ -592,7 +724,10 @@ var temperature = {
   type: 'area'
 },
 dataLabels: {
-  enabled: true
+  enabled: true,
+  style: {
+    color: '#000'
+  }
 },
 stroke: {
   curve: 'smooth'
