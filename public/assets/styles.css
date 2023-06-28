@@ -1,8 +1,9 @@
 
 body {
   background: #343E59;
-  color: #777;
+  color: #ffffff;
   font-family: Montserrat, Arial, sans-serif;
+  font-size: large;
 }
 
 .body-bg {
@@ -11,11 +12,6 @@ body {
 
 h1, h2, h3, h4, h5, h6, strong {
   font-weight: 600;
-}
-
-body {
-  /*background: linear-gradient(45deg,#3a3a60,#5f5f8e);
-  min-height: 100vh;*/
 }
 
 .content-area {
@@ -51,6 +47,9 @@ body {
   top: -8px;
   color: #fff;
 }
+.space {
+  margin: 5px 0px;
+}
 
 
 .sparkboxes .box1 {
@@ -67,4 +66,8 @@ body {
 
 .sparkboxes .box4 {
   background-image: linear-gradient( 135deg, #EE9AE5 10%, #5961F9 100%);
+}
+
+.sparkboxes .box5 {
+  background-image: linear-gradient( 135deg, #E1EE9A 10%, #5FF959 100%);
 }

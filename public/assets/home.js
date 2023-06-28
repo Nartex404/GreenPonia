@@ -50,7 +50,6 @@ function initMap() {
                 markerContent.style.display = 'block';
                 var titleCrop = document.getElementById("title-crop");
                 titleCrop.innerHTML = doc.data().name;
-                
                 db.collection("agroclima").doc("realtime")
                 .onSnapshot({
                     // Listen for document metadata changes
@@ -69,7 +68,6 @@ function initMap() {
                             hour12: false
                         };
                         document.getElementById("text-date").innerHTML = date.toLocaleString("default", options);
-                        console.log('timestamp',date.toLocaleString("default", options))
                     }
                     document.getElementById("text-ph").innerHTML = dat.ph;
                     document.getElementById("text-cond").innerHTML = dat.cond;

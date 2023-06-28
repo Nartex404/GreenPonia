@@ -1,142 +1,93 @@
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBm2atJDKZpTvpfFUZcVvlqF9yP0LaoKvs",
-    authDomain: "greenponia-b8a97.firebaseapp.com",
-    projectId: "greenponia-b8a97",
-    storageBucket: "greenponia-b8a97.appspot.com",
-    messagingSenderId: "352633184413",
-    appId: "1:352633184413:web:69c661fc0100f9ed20f474",
-    measurementId: "G-CFJZGNQWJ1"
+  apiKey: "AIzaSyBm2atJDKZpTvpfFUZcVvlqF9yP0LaoKvs",
+  authDomain: "greenponia-b8a97.firebaseapp.com",
+  projectId: "greenponia-b8a97",
+  storageBucket: "greenponia-b8a97.appspot.com",
+  messagingSenderId: "352633184413",
+  appId: "1:352633184413:web:69c661fc0100f9ed20f474",
+  measurementId: "G-CFJZGNQWJ1"
 };
+var colorPalette = ['#00D8B6', '#008FFB', '#FEB019', '#FF4560', '#775DD0']
 firebase.initializeApp(firebaseConfig);
+
+window.Apex = {
+  chart: {
+    foreColor: '#ccc',
+    toolbar: {
+      show: false
+    },
+  },
+  stroke: {
+    width: 3
+  },
+  dataLabels: {
+    enabled: false
+  },
+  tooltip: {
+    theme: 'dark'
+  },
+  grid: {
+    borderColor: "#535A6C",
+    xaxis: {
+      lines: {
+        show: true
+      }
+    }
+  }
+};
 
 // Obtener la colección "agroclima" de Firestore
 const db = firebase.firestore();
-const agroclimaCollection = db.collection('agroclima');
-//console.log("Console1:"+JSON.stringify(agroRef));
-//var agroclimaCollection = agroRef.where("ph","<","6.5");
-//console.log("Console2:"+JSON.stringify(agroclimaCollection));
+db.collection("agroclima")
+  .onSnapshot({ includeMetadataChanges: true }, (snapshot) => {
 
-/*db.collection("agroclima").where("ph", "<", 6.5)
-    .get()
-    .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-        });
-    })
-    .catch((error) => {
-        console.log("Error getting documents: ", error);
-    });*/
-
-Apex.grid = {
-  padding: {
-    right: 0,
-    left: 0
-  }
-}
-
-Apex.dataLabels = {
-  enabled: false
-}
-
-var randomizeArray = function (arg) {
-  var array = arg.slice();
-  var currentIndex = array.length, temporaryValue, randomIndex;
-
-  while (0 !== currentIndex) {
-
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-}
-
-// data for the sparklines that appear below header area
-var sparklineData = [47, 45, 54, 38, 56, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 27, 54, 43, 19, 46];
-
-// the default colorPalette for this dashboard
-//var colorPalette = ['#01BFD6', '#5564BE', '#F7A600', '#EDCD24', '#F74F58'];
-var colorPalette = ['#00D8B6','#008FFB',  '#FEB019', '#FF4560', '#775DD0']
-
-
-
-agroclimaCollection.get().then((querySnapshot) => {
-  //const data = querySnapshot.docs.map((doc) => doc.data());
-  //const idElement = querySnapshot.docs.map((doc) => doc.id);
-
-  const data = [];
-  const realData = [];
-  const date = [];
-  let html ="";
-  querySnapshot.forEach((doc) => {
-    var phSeg = Number(doc.data().ph).toFixed(2);
-    var condSeg = Number(doc.data().cond).toFixed(2);
-      if (doc.id !== 'realtime'){
+    const data = [];
+    const realData = [];
+    snapshot.forEach((doc) => {
+      var phSeg = Number(doc.data().ph).toFixed(2);
+      var condSeg = Number(doc.data().cond).toFixed(2);
+      if (doc.id !== 'realtime') {
         const date = new Date(parseInt(doc.id));
         const getYear = date.toLocaleString("default", { year: "numeric" });
         const getMonth = date.toLocaleString("default", { month: "2-digit" });
         const getDay = date.toLocaleString("default", { day: "2-digit" });
-        const timestamp = getMonth +"-"+getDay;
-        const a = data.find(x=>x.date == timestamp)
-        /*if(!a){
+        const timestamp = getMonth + "-" + getDay;
+        const a = data.find(x => x.date == timestamp)
+  
+        if (timestamp == '06-20') {
           data.push({
             id: doc.id,
             cond: condSeg,
             crec: doc.data().crec,
-            hum: doc.data().hum ,
+            hum: doc.data().hum,
             ph: phSeg,
             temp: doc.data().temp,
-            date: timestamp
-          });
-        }*/
-
-        
-        
-
-        if(timestamp ==  '06-05')
-        {
-          data.push({
-            id: doc.id,
-            cond: condSeg,
-            crec: doc.data().crec,
-            hum: doc.data().hum ,
-            ph: phSeg,
-            temp: doc.data().temp,
-            date: getDay
+            date: getMonth+"/"+getDay
           });
         }
-     
-      //console.log(data.map((d) => d.date));
-      }else{
+  
+        //console.log(data.map((d) => d.date));
+      } else {
         realData.push({
-        id: doc.id,
-        cond: condSeg,
-        crec: doc.data().crec,
-        hum: doc.data().hum ,
-        ph: phSeg,
-        temp: doc.data().temp,
-      });
+          id: doc.id,
+          cond: condSeg,
+          crec: doc.data().crec,
+          hum: doc.data().hum,
+          ph: phSeg,
+          temp: doc.data().temp,
+        });
         //console.log(doc.id);
       }
-
-  });
-
-
-
-  
+      //console.log('onSnapshot', doc.id, doc.data());
+    })
 
   var spark1 = {
     chart: {
       id: 'sparkline1',
       group: 'sparklines',
       type: 'area',
-      height: 160,
+      height: 70,
       sparkline: {
         enabled: true
       },
@@ -164,6 +115,7 @@ agroclimaCollection.get().then((querySnapshot) => {
       offsetX: 30,
       style: {
         fontSize: '24px',
+        color:  '#000',
         cssClass: 'apexcharts-yaxis-title'
       }
     },
@@ -172,17 +124,17 @@ agroclimaCollection.get().then((querySnapshot) => {
       offsetX: 30,
       style: {
         fontSize: '14px',
-        cssClass: 'apexcharts-yaxis-title'
+        color:  '#000',
       }
     }
   }
-  
+
   var spark2 = {
     chart: {
       id: 'sparkline2',
       group: 'sparklines',
       type: 'area',
-      height: 160,
+      height: 70,
       sparkline: {
         enabled: true
       },
@@ -195,7 +147,7 @@ agroclimaCollection.get().then((querySnapshot) => {
     },
     series: [{
       name: 'Conductividad',
-      data: data.map((d) => d.cond)
+      //data: data.map((d) => d.cond)
     }],
     labels: data.map((d) => d.date),
     yaxis: {
@@ -210,6 +162,7 @@ agroclimaCollection.get().then((querySnapshot) => {
       offsetX: 30,
       style: {
         fontSize: '24px',
+        color:  '#000',
         cssClass: 'apexcharts-yaxis-title'
       }
     },
@@ -218,17 +171,18 @@ agroclimaCollection.get().then((querySnapshot) => {
       offsetX: 30,
       style: {
         fontSize: '14px',
+        color:  '#000',
         cssClass: 'apexcharts-yaxis-title'
       }
     }
   }
-  
+
   var spark3 = {
     chart: {
       id: 'sparkline3',
       group: 'sparklines',
       type: 'area',
-      height: 160,
+      height: 70,
       sparkline: {
         enabled: true
       },
@@ -241,7 +195,7 @@ agroclimaCollection.get().then((querySnapshot) => {
     },
     series: [{
       name: 'Humedad',
-      data: data.map((d) => d.hum)
+      //data: data.map((d) => d.hum)
     }],
     labels: data.map((d) => d.date),
     xaxis: {
@@ -251,12 +205,12 @@ agroclimaCollection.get().then((querySnapshot) => {
       min: 0
     },
     colors: ['#FEB019'],
-    //colors: ['#5564BE'],
     title: {
       text: realData.map((d) => d.hum),
       offsetX: 30,
       style: {
         fontSize: '24px',
+        color:  '#000',
         cssClass: 'apexcharts-yaxis-title'
       }
     },
@@ -265,6 +219,7 @@ agroclimaCollection.get().then((querySnapshot) => {
       offsetX: 30,
       style: {
         fontSize: '14px',
+        color:  '#000',
         cssClass: 'apexcharts-yaxis-title'
       }
     }
@@ -272,10 +227,10 @@ agroclimaCollection.get().then((querySnapshot) => {
 
   var spark4 = {
     chart: {
-      id: 'sparkline3',
+      id: 'sparkline4',
       group: 'sparklines',
       type: 'area',
-      height: 160,
+      height: 70,
       sparkline: {
         enabled: true
       },
@@ -287,8 +242,8 @@ agroclimaCollection.get().then((querySnapshot) => {
       opacity: 1,
     },
     series: [{
-      name: 'Humedad',
-      data: data.map((d) => d.hum)
+      name: 'Crecimiento',
+      //data: data.map((d) => d.hum)
     }],
     labels: data.map((d) => d.date),
     xaxis: {
@@ -300,18 +255,20 @@ agroclimaCollection.get().then((querySnapshot) => {
     colors: ['#FEB019'],
     //colors: ['#5564BE'],
     title: {
-      text: realData.map((d) => d.hum),
+      text: realData.map((d) => d.crec),
       offsetX: 30,
       style: {
         fontSize: '24px',
+        color:  '#000',
         cssClass: 'apexcharts-yaxis-title'
       }
     },
     subtitle: {
-      text: 'Humedad',
+      text: 'Crecimiento',
       offsetX: 30,
       style: {
         fontSize: '14px',
+        color:  '#000',
         cssClass: 'apexcharts-yaxis-title'
       }
     }
@@ -319,10 +276,10 @@ agroclimaCollection.get().then((querySnapshot) => {
 
   var spark5 = {
     chart: {
-      id: 'sparkline3',
+      id: 'sparkline5',
       group: 'sparklines',
       type: 'area',
-      height: 160,
+      height: 70,
       sparkline: {
         enabled: true
       },
@@ -334,8 +291,8 @@ agroclimaCollection.get().then((querySnapshot) => {
       opacity: 1,
     },
     series: [{
-      name: 'Humedad',
-      data: data.map((d) => d.hum)
+      name: 'Temperatura',
+      //data: data.map((d) => d.hum)
     }],
     labels: data.map((d) => d.date),
     xaxis: {
@@ -347,393 +304,332 @@ agroclimaCollection.get().then((querySnapshot) => {
     colors: ['#FEB019'],
     //colors: ['#5564BE'],
     title: {
-      text: realData.map((d) => d.hum),
+      text: realData.map((d) => d.temp),
       offsetX: 30,
       style: {
         fontSize: '24px',
+        color:  '#000',
         cssClass: 'apexcharts-yaxis-title'
       }
     },
     subtitle: {
-      text: 'Humedad',
+      text: 'Temperatura',
       offsetX: 30,
       style: {
         fontSize: '14px',
+        color:  '#000',
         cssClass: 'apexcharts-yaxis-title'
       }
     }
   }
-  
-  var monthlyEarningsOpt = {
-    chart: {
-      type: 'area',
-      height: 260,
-      background: '#eff4f7',
-      sparkline: {
-        enabled: true
-      },
-      offsetY: 20
-    },
-    stroke: {
-      curve: 'straight'
-    },
-    fill: {
-      type: 'solid',
-      opacity: 1,
-    },
-    series: [{
-      data: randomizeArray(sparklineData)
-    }],
-    xaxis: {
-      crosshairs: {
-        width: 1
-      },
-    },
-    yaxis: {
-      min: 0,
-      max: 130
-    },
-    colors: ['#dce6ec'],
-  
-    title: {
-      text: 'Total Earned',
-      offsetX: -30,
-      offsetY: 100,
-      align: 'right',
-      style: {
-        color: '#7c939f',
-        fontSize: '16px',
-        cssClass: 'apexcharts-yaxis-title'
-      }
-    },
-    subtitle: {
-      text: '$135,965',
-      offsetX: -30,
-      offsetY: 100,
-      align: 'right',
-      style: {
-        color: '#7c939f',
-        fontSize: '24px',
-        cssClass: 'apexcharts-yaxis-title'
-      }
-    }
-  }
-  
-  
+
+
   new ApexCharts(document.querySelector("#spark1"), spark1).render();
   new ApexCharts(document.querySelector("#spark2"), spark2).render();
   new ApexCharts(document.querySelector("#spark3"), spark3).render();
   new ApexCharts(document.querySelector("#spark4"), spark4).render();
   new ApexCharts(document.querySelector("#spark5"), spark5).render();
-  
-  var monthlyEarningsChart = new ApexCharts(document.querySelector("#monthly-earnings-chart"), monthlyEarningsOpt);
-  
-  
 
-  const optionsArea = {
+
+  //Humedad
+  var optionsLine = {
     chart: {
-      type: "area",
-      height: 380,
-      width: '100%',
-      stacked: true,
+      height: 328,
+      type: 'line',
+      zoom: {
+        enabled: false
+      },
+      dropShadow: {
+        enabled: true,
+        top: 3,
+        left: 2,
+        blur: 4,
+        opacity: 1,
+      }
     },
+    stroke: {
+      curve: 'smooth',
+      width: 2
+    },
+    colors: ["#FFD3A5"],
+    series: [{
+        name: "Humedad",
+        data: data.map((d) => d.hum),
+    }
+    ],
     title: {
-      floating: false,
-      text: 'Conductividad',
+      text: 'Control de Humedad',
       align: 'left',
       style: {
         fontSize: '18px'
       }
     },
-    dataLabels: {
-      enabled: false
-    },
-    series: [
-      {
-        name: "Conductividad",
-        data: data.map((d) => d.cond),
-      }
-    ],
-    colors: ["#66DA26"],
-    fill: {
-      type: "gradient",
-      gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.7,
-        opacityTo: 0.9,
-        stops: [0, 90, 100]
-      }
-    },
     markers: {
-      size: 5,
-      colors: ["#66DA26"],
-      strokeColor: "#00BAEC",
-      strokeWidth: 3
+      size: 6,
+      strokeWidth: 0,
+      hover: {
+        size: 9
+      }
     },
+    grid: {
+      show: true,
+      padding: {
+        bottom: 0
+      }
+    },
+    labels: data.map((d) => d.date),
     xaxis: {
-      categories: data.map((d) => d.date)
+      tooltip: {
+        enabled: false
+      }
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'right',
+      offsetY: -20
     }
   }
-  const chartArea = new ApexCharts(document.querySelector('#area'), optionsArea);
 
-//var chartArea = new ApexCharts(document.querySelector('#area'), optionsArea);
-chartArea.render();
+  var chartLine = new ApexCharts(document.querySelector('#line-humed'), optionsLine);
+  chartLine.render();
 
-console.log("DATALENGHT",data.length)
-console.log("paletENGHT",colorPalette.length)
-const colorSequence = [];
-    for (let i = 0; i < data.length; i++) {
-      const colorIndex = i % colorPalette.length;
-      colorSequence.push(colorPalette[colorIndex]);
+  //PH    
+  var optionsBar = {
+    series: [
+    {
+      data: data.map((item) => item.ph),
     }
-
-    console.log("DATALENGHT",colorSequence.length)
-
-var optionsBar = {
-  chart: {
+  ],
+    chart: {
+    height: 350,
     type: 'bar',
-    height: 380,
-    width: '100%',
-    stacked: true,
-  },
-  colors: [function({ value, seriesIndex, w }) {
-    if (value > 6) {
-        return '#7E36AF'
-    } else {
-        return '#D9534F'
+    zoom: {
+      enabled: false
     }
-  }],
-  series: [{
-    name: 'PH',
-    data: data.map((item) => item.ph),
-  }],
+  },
+  plotOptions: {
+    bar: {
+      isDumbbell: false,
+      columnWidth: 3,
+      dumbbellColors: [['#00E396']]
+    }
+  },
+  
+  legend: {
+    show: true,
+    showForSingleSeries: true,
+    position: 'top',
+    horizontalAlign: 'left',
+    customLegendItems: ['PH']
+  },
+  fill: {
+    type: 'gradient',
+    gradient: {
+      type: 'vertical',
+      gradientToColors: ['#00E396'],
+      inverseColors: false
+    }
+  },
   labels: data.map((item) => item.date),
-  xaxis: {
-    labels: {
-      show: false
-    },
-    axisBorder: {
-      show: false
-    },
-    axisTicks: {
-      show: false
-    },
-  },
-  yaxis: {
-    axisBorder: {
-      show: false
-    },
-    axisTicks: {
-      show: false
-    },
-    labels: {
-      style: {
-        colors: '#78909c'
-      }
-    }
-  },
   title: {
     text: 'Control de PH',
     align: 'left',
     style: {
       fontSize: '18px'
     }
-  }
-
-}
-
-var chartBar = new ApexCharts(document.querySelector('#bar'), optionsBar);
-chartBar.render();
-
-
-var optionDonut = {
-  chart: {
-    type: "area",
-    height: 380,
-    width: '100%',
-    stacked: true,
   },
-  title: {
-    floating: false,
-    text: 'Humedad',
-    align: 'left',
-    style: {
-      fontSize: '18px'
+  grid: {
+    xaxis: {
+      lines: {
+        show: true
+      }
+    },
+    yaxis: {
+      lines: {
+        show: false
+      }
     }
   },
-  dataLabels: {
+  xaxis: {
+    tickPlacement: 'on'
+  }
+  };
+
+  var chartBar = new ApexCharts(document.querySelector('#bar'), optionsBar);
+  chartBar.render();
+
+
+
+ //CONDUCTIVIDAD
+ var optionsArea = {
+ 
+ chart: {
+  height: 328,
+  type: 'line',
+  zoom: {
     enabled: false
   },
-  series: [
-    {
-      name: "Humedad",
-      data: data.map((d) => d.hum),
-    }
-  ],
-  colors: ["#FEB019"],
-  fill: {
-    type: "gradient",
-    gradient: {
-      shadeIntensity: 1,
-      opacityFrom: 0.7,
-      opacityTo: 0.9,
-      stops: [0, 90, 100]
-    }
-  },
-  markers: {
-    size: 5,
-    colors: ["#775DD0"],
-    strokeColor: "#FF4560",
-    strokeWidth: 3
-  },
-  xaxis: {
-    categories: data.map((d) => d.date)
+  dropShadow: {
+    enabled: true,
+    top: 3,
+    left: 2,
+    blur: 4,
+    opacity: 1,
   }
+},
+stroke: {
+  curve: 'smooth',
+  width: 2
+},
+colors: ["#2AFADF"],
+series: [{
+    name: "Conductividad",
+    data: data.map((d) => d.cond),
+}
+],
+title: {
+  text: 'Conductividad',
+  align: 'left',
+  style: {
+    fontSize: '18px'
+  }
+},
+markers: {
+  size: 6,
+  strokeWidth: 0,
+  hover: {
+    size: 9
+  }
+},
+grid: {
+  show: true,
+  padding: {
+    bottom: 0
+  }
+},
+labels: data.map((d) => d.date),
+xaxis: {
+  tooltip: {
+    enabled: false
+  }
+},
+legend: {
+  position: 'top',
+  horizontalAlign: 'right',
+  offsetY: -20
+}
 }
 
-var donut = new ApexCharts(
-  document.querySelector("#donut"),
-  optionDonut
-)
-donut.render();
+var chartArea = new ApexCharts(document.querySelector('#area'), optionsArea);
+chartArea.render();
 
-
-/*function trigoSeries(cnt, strength) {
-  var data = [];
-  for (var i = 0; i < cnt; i++) {
-      data.push((Math.sin(i / strength) * (i / strength) + i / strength+1) * (strength*2));
-  }
-
-  return data;
-}*/
-
-
-
-var optionsLine = {
+//Crecimiento      
+var optionsGrow = {
+  series: [{
+  name: 'Crecimiento',
+  data: data.map((d) => d.crec)
+}],
   chart: {
-    height: 380,
-    type: 'line',
-    zoom: {
-      enabled: false
-    }
+  type: 'bar',
+  height: 350
+},
+plotOptions: {
+  bar: {
+    horizontal: false,
+    columnWidth: '55%',
+    endingShape: 'rounded'
   },
-  plotOptions: {
-    stroke: {
-      width: 4,
-      curve: 'smooth'
-    },
-  },
-  colors: colorPalette,
-  series: [
-    {
-      name: "Crecimiento",
-      data: data.map((d) => d.crec),
-    }
-  ],
+},
+title: {
+  text: 'Porcentaje de Crecimiento',
+  align: 'left',
+  style: {
+    fontSize: '18px'
+  }
+},
+dataLabels: {
+  enabled: false
+},
+colors: ["#5961F9"],
+stroke: {
+  show: true,
+  width: 2,
+  colors: ['transparent']
+},
+xaxis: {
+  categories: data.map((d) => d.date),
+},
+yaxis: {
   title: {
-    floating: false,
-    text: 'Crecimiento',
-    align: 'left',
-    style: {
-      fontSize: '18px'
-    }
-  },
-  subtitle: {
-    text: realData.map((d) => d.crec),
-    align: 'center',
-    margin: 30,
-    offsetY: 40,
-    style: {
-      color: '#222',
-      fontSize: '24px',
-    }
-  },
-  markers: {
-    size: 0
-  },
-
-  grid: {
-
-  },
-  labels: data.map((item) => item.date),
-  xaxis: {
-    labels: {
-      show: false
-    },
-    axisTicks: {
-      show: false
-    },
-    tooltip: {
-      enabled: false
-    }
-  },
-  yaxis: {
-    tickAmount: 2,
-    labels: {
-      show: false
-    },
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false
-    },
-    min: 0,
-  },
-  legend: {
-    position: 'top',
-    horizontalAlign: 'left',
-    offsetY: -20,
-    offsetX: -30
+    text: '% de crecimiento'
   }
-
-}
-
-var chartLine = new ApexCharts(document.querySelector('#line'), optionsLine);
-
-// a small hack to extend height in website sample dashboard
-chartLine.render().then(function () {
-  var ifr = document.querySelector("#wrapper");
-  if (ifr.contentDocument) {
-    ifr.style.height = ifr.contentDocument.body.scrollHeight + 20 + 'px';
-  }
-});
-
-
-// on smaller screen, change the legends position for donut
-var mobileDonut = function() {
-  if($(window).width() < 768) {
-    donut.updateOptions({
-      plotOptions: {
-        pie: {
-          offsetY: -15,
-        }
-      },
-      legend: {
-        position: 'bottom'
-      }
-    }, false, false)
-  }
-  else {
-    donut.updateOptions({
-      plotOptions: {
-        pie: {
-          offsetY: 20,
-        }
-      },
-      legend: {
-        position: 'left'
-      }
-    }, false, false)
+},
+fill: {
+  opacity: 1
+},
+tooltip: {
+  y: {
+    formatter: function (val) {
+      return val + "%"
+    }
   }
 }
+};
 
-$(window).resize(function() {
-  mobileDonut()
-});
+var chartGrow = new ApexCharts(document.querySelector("#chart-grow"), optionsGrow);
+chartGrow.render();
 
 
-});
+//Temperatura
+
+var temperature = {
+  series: [{
+  name: 'Temperatura',
+  data: data.map((d) => d.temp)
+}, ],
+  chart: {
+  height: 350,
+  type: 'area'
+},
+dataLabels: {
+  enabled: true
+},
+stroke: {
+  curve: 'smooth'
+},
+labels: data.map((d) => d.date),
+xaxis: {
+  tooltip: {
+    enabled: false
+  }
+},
+colors: ["#5FF959"],
+tooltip: {
+  x: {
+    format: 'dd/MM/yy HH:mm'
+  },
+},
+
+title: {
+  text: 'Temperatura',
+  align: 'left',
+  style: {
+    fontSize: '18px'
+  }
+},
+};
+
+var areaTemp = new ApexCharts(document.querySelector("#area-temp"), temperature);
+areaTemp.render();
+
+
+
+ 
+
+
+  }, (error) => {
+    console.error('onSnapshot error', error);
+  });
 
 
 
