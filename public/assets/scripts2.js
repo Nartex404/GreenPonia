@@ -47,6 +47,7 @@ window.Apex = {
     const realData = [];
     const date = [];
     let html ="";
+    var i = 0;
     querySnapshot.forEach((doc) => {
       var phSeg = Number(doc.data().ph).toFixed(2);
       var condSeg = Number(doc.data().cond).toFixed(2);
@@ -85,8 +86,19 @@ window.Apex = {
         });
           //console.log(doc.id);
         }
+
+        if(doc.id != 'realtime' && doc.id != 'start_system' && !doc.data().hasOwnProperty('timestamp')) {
+          if(i < 100) {
+            console.log('update agroclima id', i, doc.id);
+            db.collection('agroclima').doc(doc.id).set({
+                timestamp: Number(doc.id)
+            }, { merge: true });
+          }
+          i++;
+      }
   
     });
+    console.log('update agroclima all data', i);
 
     var spark1 = {
         chart: {

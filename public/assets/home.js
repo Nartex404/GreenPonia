@@ -85,14 +85,16 @@ function initMap() {
 
 function actualizarFechas(db) {
     db.collection('agroclima').get().then((querySnapshot) => {
+        var i = 100;
         querySnapshot.forEach((doc) => {
             var id = doc.id;
             var data = doc.data();
-            if(id != 'realtime' && id != 'start_system' && !data.hasOwnProperty('timestamp')) {
-                console.log('update agroclima id', id);
-                db.collection('agroclima').doc(id).set({
+            if(i > 0 && id != 'realtime' && id != 'start_system' && !data.hasOwnProperty('timestamp')) {
+                console.log('update agroclima id', i, id);
+                /*db.collection('agroclima').doc(id).set({
                     timestamp: Number(id)
-                }, { merge: true });
+                }, { merge: true });*/
+                i--;
             }
             
         })

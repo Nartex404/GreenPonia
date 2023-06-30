@@ -1,6 +1,6 @@
 
 body {
-  background: #343E59;
+  background: #011719;
   color: #ffffff;
   font-family: Montserrat, Arial, sans-serif;
   font-size: large;
@@ -15,12 +15,12 @@ h1, h2, h3, h4, h5, h6, strong {
 }
 
 .content-area {
-  max-width: 1280px;
+  max-width: 92%;
   margin: 0 auto;
 }
 
 .box {
-  background-color: #2B2D3E;
+  background-color: #022123;
   padding: 25px 20px;
 }
 

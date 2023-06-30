@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Green Ponia - Map</title>
+    <title>Green Ponia - Home</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <link rel="icon" type="image/x-icon" href="images/gp.ico">
     <link rel="stylesheet" href="assets/home.css" />
@@ -41,95 +41,160 @@
     <!--The div element for the map -->
     <div class="content-green-ponia">
         <div class="header-content">
-            <div><i class="material-icons">menu</i></div>
-            <img src="images/greenLogo.png" alt="" style="width: 150px; margin-left: 15px;">
+            <div style="margin-left: 12px;">
+                <img src="images/greenLogo.png" alt="" style="width: 168px;">
+            </div>
+            <div style="color: #022123; font-size: small; margin-right: 12px; text-align: center;">
+                <div>Última actualización</div>
+                <div id="last-update">. . .</div>
+            </div>
         </div>
-        <div id="map" class="map-content">Mapa</div>
+        <div id="map" class="map-content"></div>
         <div class="data-content">
             <div id="wrapper">
                 <div class="content-area">
                   <div class="container-fluid">
-                          <div class="logo-image">
+                          <div class="logo-image" style="display: none;">
                               <img src="images/greenLogo.png" alt="" style="width: 250px;">
                           </div>
                           <div class="main">
-                            <div class="title" style="margin-top: 15px;">
+                            <div class="title" style="margin: 15px 0px;">
                               <i class="uil uil-clock-three"></i>
                               <span class="text">Actividad Reciente</span>
                             </div>
-                            <div class="row sparkboxes mt-10 mb-10">
-                              <div class="col-md-2">
-                                <div class="box box1">
-                                  <div id="spark1"></div>
+                            <div class="row sparkboxes mt-12 mb-12">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-2">
+                                    <div class="box" style="background: #022123;">
+                                        <div style="height: 70px;">
+                                            <div>
+                                                <h6>Crecimiento</h6>
+                                                <div style="display: flex; align-items: center; justify-content: space-evenly;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 20 20"><path fill="currentColor" d="M14.5 2a.5.5 0 0 0 0 1h1.793L11.5 7.793L8.854 5.146a.5.5 0 0 0-.708 0l-5 5a.5.5 0 0 0 .708.708L8.5 6.207l2.646 2.647a.5.5 0 0 0 .708 0L17 3.707V5.5a.5.5 0 0 0 1 0v-3a.5.5 0 0 0-.5-.5h-3Zm1 7a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 1 0v-8a.5.5 0 0 0-.5-.5Zm-8 2a.5.5 0 0 0-.5.5v6a.5.5 0 0 0 1 0v-6a.5.5 0 0 0-.5-.5Zm3.5 2.5a.5.5 0 0 1 1 0v4a.5.5 0 0 1-1 0v-4Zm-8 1a.5.5 0 0 1 1 0v3a.5.5 0 0 1-1 0v-3Z"/></svg>
+                                                    <h4 id="spark-crec" style="margin-bottom: 0px;"><b>...</b></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                              </div>
-                              <div class="col-md-2">
-                                <div class="box box2">
-                                  <div id="spark2"></div>
+                                <div class="col-md-2">
+                                    <div class="box" style="background: #022123;">
+                                        <div style="height: 70px;">
+                                            <div>
+                                                <h6>Conductividad</h6>
+                                                <div style="display: flex; align-items: center; justify-content: space-evenly;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="m7 22l4-7.5l-8-1L15 2h2l-4 7.5l8 1L9 22H7Zm5.55-6.175l4.025-3.85l-6.725-.85L11.425 8.2l-4 3.85l6.7.825l-1.575 2.95ZM12 12Z"/></svg>
+                                                    <h4 id="spark-cond" style="margin-bottom: 0px;"><b>...</b></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                              </div>
-                              <div class="col-md-2">
-                                <div class="box box3">
-                                  <div id="spark3"></div>
+                                <div class="col-md-2">
+                                    <div class="box" style="background: #022123;">
+                                        <div style="height: 70px;">
+                                            <div>
+                                                <h6>Humedad</h6>
+                                                <div style="display: flex; align-items: center; justify-content: space-evenly;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill="currentColor" d="M26 12a3.898 3.898 0 0 1-4-3.777a3.902 3.902 0 0 1 .653-2.064l2.517-3.745a1.038 1.038 0 0 1 1.66 0l2.485 3.696A3.97 3.97 0 0 1 30 8.223A3.898 3.898 0 0 1 26 12zm0-7.237l-1.656 2.463a1.89 1.89 0 0 0-.344.997a2.014 2.014 0 0 0 4 0a1.98 1.98 0 0 0-.375-1.047zM23.5 30h-15a6.496 6.496 0 0 1-1.3-12.862a8.994 8.994 0 0 1 17.6 0A6.496 6.496 0 0 1 23.5 30zM16 12a7 7 0 0 0-6.941 6.145l-.1.812l-.815.064A4.496 4.496 0 0 0 8.5 28h15a4.496 4.496 0 0 0 .356-8.979l-.815-.064l-.099-.812A7.002 7.002 0 0 0 16 12z"/></svg>
+                                                    <h4 id="spark-hum" style="margin-bottom: 0px;"><b>...</b></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                              </div>
-                              <div class="col-md-2">
-                                <div class="box box4">
-                                  <div id="spark4"></div>
+                                <div class="col-md-2">
+                                    <div class="box" style="background: #022123;">
+                                        <div style="height: 70px;">
+                                            <div>
+                                                <h6>Temperatura</h6>
+                                                <div style="display: flex; align-items: center; justify-content: space-evenly;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M14.863 13.4V4.939a2.929 2.929 0 0 0-.84-2.03a2.859 2.859 0 0 0-2.23-.82a2.948 2.948 0 0 0-2.66 3l.01 8.28a4.755 4.755 0 0 0 1.9 8.46a5.093 5.093 0 0 0 .95.09a4.759 4.759 0 0 0 4.76-4.75a4.684 4.684 0 0 0-1.89-3.769Zm-.48 6.66a3.783 3.783 0 0 1-3.15.78a3.7 3.7 0 0 1-2.92-2.98a3.745 3.745 0 0 1 1.43-3.69a.962.962 0 0 0 .39-.77V5.089a1.968 1.968 0 0 1 1.73-2a.66.66 0 0 1 .14-.01a1.878 1.878 0 0 1 1.86 1.86V13.4a.962.962 0 0 0 .39.77a3.742 3.742 0 0 1 .13 5.89Z"/><path fill="currentColor" d="M13.893 17.169a1.89 1.89 0 0 1-3.78 0a1.858 1.858 0 0 1 1.39-1.81V5.4a.5.5 0 0 1 1 0v9.96a1.869 1.869 0 0 1 1.39 1.809Z"/></svg>
+                                                    <h4 id="spark-temp" style="margin-bottom: 0px;"><b>...</b></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                              </div>
-                              <div class="col-md-2">
-                                <div class="box box5">
-                                  <div id="spark5"></div>
+                                <div class="col-md-2">
+                                    <div class="box" style="background: #022123;">
+                                        <div style="height: 70px;">
+                                            <div>
+                                                <h6>PH</h6>
+                                                <div style="display: flex; align-items: center; justify-content: space-evenly;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M9 21.95q-3.05-.35-5.025-2.625T2 13.8q0-2.5 1.988-5.438T10 2q4.025 3.425 6.013 6.363T18 13.8v.2h-2v-.2q0-1.825-1.513-4.125T10 4.65Q7.025 7.375 5.513 9.675T4 13.8q0 2.425 1.4 4.1T9 19.925v2.025Zm1-9.675ZM11 22v-6h3.5q.6 0 1.05.45T16 17.5v1q0 .6-.45 1.05T14.5 20h-2v2H11Zm6 0v-6h1.5v2h2v-2H22v6h-1.5v-2.5h-2V22H17Zm-4.5-3.5h2v-1h-2v1Z"/></svg>
+                                                    <h4 id="spark-ph" style="margin-bottom: 0px;"><b>...</b></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                              </div>
-                      
+                                <div class="col-md-1"></div>
                             </div>
-          
-                            <div class="title" style="margin-top: 50px;">
-                              <i class="uil uil-clock-three"></i>
-                              <span class="text">Historico</span>
+                            
+                            <div class="title" style="margin-top: 50px; display: flex; justify-content: space-between;">
+                                <div>
+                                    <i class="uil uil-history"></i>
+                                    <span class="text">Histórico</span>
+                                </div>
+                                <div>
+                                    <label for="start">Fecha:</label>
+                                    <input  type="date" id="start-date" name="trip-start-date"
+                                        min="2023-01-01" style="filter: invert(1)">
+                                    <label for="start"> a </label>
+                                    <input  type="date" id="end-date" name="trip-end-date"
+                                        min="2023-01-01" style="filter: invert(1)">
+                                    <button id="btn-search" style="filter: invert(1)">Buscar</button>
+                                </div>
+                            </div>
+                            <div id="searching-data" style="display: flex; justify-content: center; margin-top: 10px;">
+                                <div class="loader"></div>
+                            </div>
+
+                            <div id="not-found-data" class="title" style="margin: 15px 0px; color: #ffb5b5; text-align: center; display: none;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4m0 4.01l.01-.011M9 3H4v3m0 5v2m16-2v2M15 3h5v3M9 21H4v-3m11 3h5v-3"/></svg>
+                                <span class="text">No hay datos para la fecha seleccionada.</span>
                             </div>
                 
-                            <div class="row mt-5 mb-4">
-                              <div class="col-md-12" style="margin: 10px 0px">
-                                <div class="box">
-                                  <div id="bar"></div>
+                            <div id="view-graphs" class="row mt-4 mb-4" style="display: none;">
+
+                                <div class="col-md-12" style="margin: 10px 0px">
+                                    <div class="box">
+                                        <div id="chart-grow"></div>
+                                    </div>
                                 </div>
-                              </div>
-                              
-                              <div class="col-md-12" style="margin: 10px 0px">
-                                <div class="box">
-                                  <div id="area"></div>
+
+                                <div class="col-md-12" style="margin: 10px 0px">
+                                    <div class="box">
+                                        <div id="area"></div>
+                                    </div>
                                 </div>
-                              </div>
+
+                                <div class="col-md-12" style="margin: 10px 0px">
+                                    <div class="box">
+                                        <div id="line-humed"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12" style="margin: 10px 0px">
+                                    <div class="box">
+                                        <div id="area-temp"></div>
+                                    </div>
+                                </div>
+                                  
+                                <div class="col-md-12" style="margin: 10px 0px">
+                                    <div class="box">
+                                        <div id="bar"></div>
+                                    </div>
+                                </div>
+
                             </div>
-                
-                            <div class="row mt-4 mb-4">
-                              <div class="col-md-12" style="margin: 10px 0px">
-                                <div class="box">
-                                  <div id="line-humed"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-12" style="margin: 10px 0px">
-                                <div class="box">
-                                  <div id="chart-grow"></div>
-                                </div>
-                              </div>
-          
-                              <div class="col-md-12" style="margin: 10px 0px">
-                                <div class="box">
-                                  <div id="area-temp"></div>
-                                </div>
-                              </div>
-                            </div>
-          
                           </div>
                         </div>
                       </div>
                     </div>
           
-              <div id="toggleContainer">
+              <div id="toggleContainer" style="display: none;">
                 <label for="startToggle">Start:</label>
                 <input type="checkbox" id="startToggle">
               </div>

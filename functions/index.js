@@ -28,78 +28,70 @@ const db = admin.firestore();
 app.all('*', async (req, res) => {
    let payload = req.body;
    const id_timestamp = new Date().getTime();
-   try{     
+   try {
 
-    //Insert data to firestore
-     if(req.url === '/uplinks'){
-      
-      //We create an collection named 'agroclima
-      const namedb = db.collection('agroclima');
+      //Insert data to firestore
+      if (req.url === '/uplinks') {
 
-///////We test if the payload is not undefined
-     if (payload.uplink_message.decoded_payload.system !== undefined){
-        //Used to monitor the functioning hardware. Save in the document called 'start_system'
-        await namedb.doc('start_system').set({
-        system:payload.uplink_message.decoded_payload.system
-   }); 
-      }      
-      else {
- //////////////If  the payload of document 'start_system' is undefined but the payload
- ///////////// of data from sensor yes, so we save the data.
+         //We create an collection named 'agroclima
+         const namedb = db.collection('agroclima');
 
-      //Save data. used for chart history.
-      await namedb.doc('/' + id_timestamp +'/').set({
-      //Route of json  incoming from the thing stack (network server LoRaWAN)
-      hum:payload.uplink_message.decoded_payload.hum,
-      temp:payload.uplink_message.decoded_payload.temp,
-      cond:payload.uplink_message.decoded_payload.cond,
-      ph: payload.uplink_message.decoded_payload.ph,
-      crec: payload.uplink_message.decoded_payload.crec
-      });
+         ///////We test if the payload is not undefined
+         if (payload.uplink_message.decoded_payload.system !== undefined) {
+            //Used to monitor the functioning hardware. Save in the document called 'start_system'
+            await namedb.doc('start_system').set({
+               system: payload.uplink_message.decoded_payload.system
+            });
+         } else {
+            //////////////If  the payload of document 'start_system' is undefined but the payload
+            ///////////// of data from sensor yes, so we save the data.
+            //Save data. used for chart history.
+            var dataInsert = {
+               timestamp: id_timestamp,
+               hum: payload.uplink_message.decoded_payload.hum,
+               temp: payload.uplink_message.decoded_payload.temp,
+               cond: payload.uplink_message.decoded_payload.cond,
+               ph: payload.uplink_message.decoded_payload.ph,
+               crec: payload.uplink_message.decoded_payload.crec
+            }
+            await namedb.doc('/' + id_timestamp + '/').set(dataInsert);
 
-     //Used to realtime data
-     await namedb.doc('realtime').set({
-      timestamp:id_timestamp,
-      hum:payload.uplink_message.decoded_payload.hum,
-      temp:payload.uplink_message.decoded_payload.temp,
-      cond:payload.uplink_message.decoded_payload.cond,
-      ph: payload.uplink_message.decoded_payload.ph,
-      crec: payload.uplink_message.decoded_payload.crec
-    });
-        }
+            //Used to realtime data
+            await namedb.doc('realtime').set(dataInsert);
+         }
 
-        return res.status(200).send();
-     }
-   ////Get data from firestore
-   if(req.url === '/data'){
-   const query =  db.collection('agroclima');
-   const raw = await query.get();
-   //Get all docs
-   const data = raw.docs;
-   //Get all data of every doc inside the collection 'agroclima'
-   const response = data.map((doc) => ({
-    id:doc.id,
-    hum: doc.data().hum,
-    temp: doc.data().temp,
-    cond: doc.data().cond,
-    ph: doc.data().ph,
-    crec: doc.data().crec
-   }))
-   //We show all data except the 'realtime' and 'start_system' documents
-   const filterdata = response.filter((item) => item.id !== 'realtime' && item.id !== 'start_system');
-      
-   return res.status(200).send(filterdata);
+         return res.status(200).send();
       }
-   
+      ////Get data from firestore
+      if (req.url === '/data') {
+         const query = db.collection('agroclima');
+         const raw = await query.get();
+         //Get all docs
+         const data = raw.docs;
+         //Get all data of every doc inside the collection 'agroclima'
+         const response = data.map((doc) => ({
+            id: doc.id,
+            hum: doc.data().hum,
+            temp: doc.data().temp,
+            cond: doc.data().cond,
+            ph: doc.data().ph,
+            crec: doc.data().crec
+         }))
+         //We show all data except the 'realtime' and 'start_system' documents
+         const filterdata = response.filter((item) => item.id !== 'realtime' && item.id !== 'start_system');
 
-res.render('index');
-return res.status(200).send();
+         return res.status(200).send(filterdata);
+      }
 
-}catch(err){
-   console.log(err);
-}
+
+      res.render('index');
+      return res.status(200).send();
+
+   } catch (err) {
+      console.log(err);
+   }
 })
-  
+
 //Export the app express as a function of cloud functions
 exports.app = functions.https.onRequest(app);
 
