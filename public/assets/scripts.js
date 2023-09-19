@@ -191,7 +191,7 @@ function renderHumerdad(data) {
       height: 328,
       type: 'line',
       zoom: {
-        enabled: false
+        enabled: true
       },
       dropShadow: {
         enabled: true,
@@ -235,6 +235,14 @@ function renderHumerdad(data) {
     xaxis: {
       tooltip: {
         enabled: false
+      },
+      title: {
+        text:'Tiempo'
+      }
+    },
+    yaxis: {
+      title: {
+        text: 'Humedad'
       }
     },
     legend: {
@@ -256,7 +264,7 @@ function renderPh(data) {
       height: 328,
       type: 'line',
       zoom: {
-        enabled: false
+        enabled: true
       },
       dropShadow: {
         enabled: true,
@@ -300,6 +308,14 @@ function renderPh(data) {
     xaxis: {
       tooltip: {
         enabled: false
+      },
+      title: {
+        text:'Tiempo'
+      }
+    },
+    yaxis: {
+      title: {
+        text: 'PH'
       }
     },
     legend: {
@@ -322,7 +338,7 @@ function renderConductividad(data) {
       height: 328,
       type: 'line',
       zoom: {
-        enabled: false
+        enabled: true
       },
       dropShadow: {
         enabled: true,
@@ -366,6 +382,14 @@ function renderConductividad(data) {
     xaxis: {
       tooltip: {
         enabled: false
+      },
+      title: {
+        text:'Tiempo'
+      }
+    },
+    yaxis: {
+      title: {
+        text: 'Conductividad'
       }
     },
     legend: {
@@ -386,7 +410,7 @@ function renderCrecimiento(data) {
       height: 328,
       type: 'line',
       zoom: {
-        enabled: false
+        enabled: true
       },
       dropShadow: {
         enabled: true,
@@ -430,6 +454,14 @@ function renderCrecimiento(data) {
     xaxis: {
       tooltip: {
         enabled: false
+      },
+      title: {
+        text:'Tiempo'
+      }
+    },
+    yaxis: {
+      title: {
+        text: '% Crecimiento'
       }
     },
     legend: {
@@ -468,6 +500,14 @@ function renderTemperatura(data) {
     xaxis: {
       tooltip: {
         enabled: false
+      },
+      title: {
+        text:'Tiempo'
+      }
+    },
+    yaxis: {
+      title: {
+        text: 'Temperatura ºC'
       }
     },
     colors: ["#5FF959"],
