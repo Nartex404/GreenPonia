@@ -3,7 +3,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-firestore.js"></script>
+
 <script>
+    const userToken = localStorage.getItem('user') ?? null
+    if (!userToken){
+    location.href = 'index.html';
+    }
     try {
         const firebaseConfig = {
             apiKey: "AIzaSyBm2atJDKZpTvpfFUZcVvlqF9yP0LaoKvs",

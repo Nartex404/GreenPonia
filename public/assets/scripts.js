@@ -11,6 +11,11 @@ const firebaseConfig = {
 var colorPalette = ['#00D8B6', '#008FFB', '#FEB019', '#FF4560', '#775DD0']
 firebase.initializeApp(firebaseConfig);
 
+const userToken = localStorage.getItem('user') ?? null
+if (!userToken){
+  location.href = 'index.html';
+}
+
 window.Apex = {
   chart: {
     foreColor: '#ccc',
@@ -528,4 +533,9 @@ function renderTemperatura(data) {
 
   chartTemperatura = new ApexCharts(document.querySelector("#area-temp"), temperature);
   chartTemperatura.render();
+}
+
+function logOut(){
+  localStorage.clear();
+  location.href = 'index.html';
 }
