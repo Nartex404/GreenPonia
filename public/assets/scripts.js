@@ -354,7 +354,7 @@ function renderConductividad(data) {
     },
     colors: ["#2AFADF"],
     series: [{
-      name: "Conductividad",
+      name: "Conductividad mS",
       data: data.map((d) => d.cond),
     }
     ],

@@ -1,0 +1,194 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-firestore.js"></script>
+<script>
+    try {
+        const firebaseConfig = {
+            apiKey: "AIzaSyBm2atJDKZpTvpfFUZcVvlqF9yP0LaoKvs",
+            authDomain: "greenponia-b8a97.firebaseapp.com",
+            projectId: "greenponia-b8a97",
+            storageBucket: "greenponia-b8a97.appspot.com",
+            messagingSenderId: "352633184413",
+            appId: "1:352633184413:web:69c661fc0100f9ed20f474",
+            measurementId: "G-CFJZGNQWJ1"
+        };
+        firebase.initializeApp(firebaseConfig);
+    } catch (error) {
+
+    }
+
+    const db = firebase.firestore();
+    var arrayData = [];
+    var position = 0;
+
+    var ExcelToJSON = function () {
+
+        this.parseExcel = function (file) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var data = e.target.result;
+                var workbook = XLSX.read(data, {
+                    type: 'binary'
+                });
+                workbook.SheetNames.forEach(function (sheetName) {
+                    // Here is your object
+                    var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                    var json_object = JSON.stringify(XL_row_object);
+                    // console.log(JSON.parse(json_object));
+                    jQuery('#xlx_json').val(json_object);
+                    arrayData = JSON.parse(json_object);
+                    document.getElementById('loading').innerText = "0 / " + arrayData.length;
+                    // arrayData.forEach((element, i) => {
+                    //     if(i < 10) {
+                    //         document.getElementById('loading').innerText = (i+1) + " / " + arrayData.length;
+                    //         console.log(i, element)
+                    //     }
+                    // });
+                })
+                prettyPrint();
+            };
+
+            reader.onerror = function (ex) {
+                console.log(ex);
+            };
+
+            reader.readAsBinaryString(file);
+        };
+    };
+
+    function handleFileSelect(evt) {
+
+        var files = evt.target.files; // FileList object
+        var xl2json = new ExcelToJSON();
+        xl2json.parseExcel(files[0]);
+    }
+    function prettyPrint() {
+        var ugly = document.getElementById('xlx_json').value;
+        var obj = JSON.parse(ugly);
+        var pretty = JSON.stringify(obj, undefined, 4);
+        document.getElementById('xlx_json').value = pretty;
+    }
+    function runUpdate() {
+        var e = document.getElementById("options");
+        var value = e.value;
+        var text = e.options[e.selectedIndex].text;
+        console.log('options', value, text)
+        document.getElementById("btnUpdate").disabled = true;
+        if (value == 'nan' || arrayData.length == 0) {
+            window.alert(arrayData.length == 0 ? 'Selecciona un archivo' : "Selecciona el campo a actualizar");
+        } else {
+            var iterador = 250;
+            var update = 0;
+            for (let index = position; index < (position + iterador); index++) {
+                if (arrayData[index] !== undefined && arrayData[index][text] !== undefined && arrayData[index]['Timestamp'] !== undefined) {
+                    const element = arrayData[index];
+                    const data = { [value]: Number(element[text]) }
+                    db.collection('agroclima').doc(element['Timestamp']).set(data, { merge: true })
+                        .then(() => {
+                            update++;
+                            console.log('runUpdate', (position + update), element['Timestamp'], data);
+                            document.getElementById('loading').innerText = (position + update) + " / " + arrayData.length;
+                            if(update == iterador) {
+                                position += update;
+                                document.getElementById("btnUpdate").disabled = false;
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error writing document: ", error);
+                        });
+                }
+            }
+        }
+    }
+    function setAction(action) {
+        if(action == 'update') {
+            document.getElementById("update-data").style.display = 'block';
+            document.getElementById("delete-data").style.display = 'none';
+            document.getElementById("btn-init-a").style.display = 'block';
+            document.getElementById("btn-init-b").style.display = 'none';
+        } else if(action == 'delete') {
+            document.getElementById("delete-data").style.display = 'block';
+            document.getElementById("update-data").style.display = 'none';
+            document.getElementById("btn-init-a").style.display = 'block';
+            document.getElementById("btn-init-b").style.display = 'none';
+        } else if(action == 'back') {
+            document.getElementById("btn-init-a").style.display = 'none';
+            document.getElementById("btn-init-b").style.display = 'block';
+            document.getElementById("update-data").style.display = 'none';
+            document.getElementById("delete-data").style.display = 'none';
+        }
+    }
+    function searchData(isDel) {
+        var startDate = `${document.getElementById("start-date").value} 00:00:00`;
+        var endDate = `${document.getElementById("end-date").value} 23:59:59`;
+        const start = new Date(startDate).getTime();
+        const end = new Date(endDate).getTime();
+        if(start >= end) {
+            alert('La fecha inicial no puede ser mayor a final');
+        } else {
+            db.collection("agroclima").where("timestamp", ">=", start).where("timestamp", "<=", end)
+            //.onSnapshot({ includeMetadataChanges: true }, (snapshot) => {
+            .get().then((snapshot) => {
+                var data = []
+                snapshot.forEach((doc) => {
+                    if(doc.id != 'realtime' && doc.id != 'start_system') {
+                        data.push(doc.data());
+                        if(isDel) {
+                            console.log('snapshot deleting',doc.id, doc.data());
+                                doc.ref.delete();
+                        } else {
+                            console.log('snapshot searching',doc.id, doc.data());
+                        }
+                    }
+                })
+                document.getElementById('loadingDel').innerText = 'Se encontraron ' + data.length + ' Registros';
+                document.getElementById("btnDel").disabled = data.length == 0;
+                var pretty = JSON.stringify(data, undefined, 4);
+                document.getElementById('xlx_json').value = pretty;
+            }, (error) => {
+                console.error('onSnapshot error', error);
+            });
+        }
+    }
+</script>
+<div style="margin: 15px 0px;">
+    <button id="btn-init-a" onclick="setAction('back')" style="display: none;">Volver</button>
+    <div id="btn-init-b">
+        <button onclick="setAction('update')">Actualizar datos</button>
+        <button onclick="setAction('delete')">Eliminar datos</button>
+    </div>
+</div>
+<div id="delete-data" style="display: none;">
+    <label for="start">Fecha:</label>
+    <input  type="date" id="start-date" name="trip-start-date"
+        min="2023-01-01">
+    <label for="start"> a </label>
+    <input  type="date" id="end-date" name="trip-end-date"
+        min="2023-01-01">
+    <button onclick="searchData(false)">Buscar</button>
+    <div style="margin: 8px 0px;"><span id="loadingDel">0</span><button id="btnDel" onclick="searchData(true)" style="margin-left: 10px;" disabled="true">Borrar</button></div>
+</div>
+<div id="update-data" style="display: none;">
+    <form enctype="multipart/form-data">
+        <select name="options" id="options">
+            <option value="nan">Seleccione uno...</option>
+            <option value="cond">Conductividad</option>
+            <option value="crec">Crecimiento</option>
+            <option value="hum">Humedad</option>
+            <option value="ph">Ph</option>
+            <option value="temp">Temperatura</option>
+            <!-- <option value="timestamp">Timestamp</option> -->
+        </select>
+        <input id="upload" type=file name="files[]">
+    </form>
+    <div><span id="loading">0 / 0</span><button id="btnUpdate" onclick="runUpdate()" style="margin-left: 10px;">Actualizar</button></div>
+</div>
+<div style="height: 90%; width: 100%;"><textarea style="width: 100%; height: 100%;" class="form-control" rows=35
+        cols=120 id="xlx_json"></textarea></div>
+<div style="display: none;"><button onclick="prettyPrint()">To JSON</button></div>
+<script>
+    document.getElementById('upload').addEventListener('change', handleFileSelect, false);
+</script>
